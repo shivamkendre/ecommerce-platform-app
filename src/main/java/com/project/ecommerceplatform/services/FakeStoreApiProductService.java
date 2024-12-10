@@ -7,7 +7,9 @@ import com.project.ecommerceplatform.util.DtoToModelConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FakeStoreApiProductService implements ProductService{
@@ -32,8 +34,12 @@ public class FakeStoreApiProductService implements ProductService{
     }
 
     @Override
-    public List<Product> getProducts() {
-        return List.of();
+    public List<Product> getProducts() throws ProductNotFoundException{
+        FakeStoreApiDto[] fakeStoreListApiDto = restTemplate.getForObject("https://fakestoreapi.com/products", FakeStoreApiDto[].class);
+        if(fakeStoreListApiDto == null) {
+            throw new ProductNotFoundException("Products not found!!");
+        }
+        return  Arrays.stream(fakeStoreListApiDto).map(fakeStoreApiDto -> dtoToModelConverter.convertFakeStoreApiToProduct(fakeStoreApiDto)).collect(Collectors.toList());
     }
 
     @Override
@@ -41,9 +47,15 @@ public class FakeStoreApiProductService implements ProductService{
         return List.of();
     }
 
+
+
     @Override
-    public Product updateProduct(Product product) {
-        return null;
+    public Product updateProduct(int id, Product product) throws ProductNotFoundException {
+        product = restTemplate.patchForObject("https://fakestoreapi.com/products/" + product.getId(), product, Product.class);
+        if(product == null) {
+            throw new ProductNotFoundException("Product Not Found!!");
+        }
+        return product;
     }
 
     @Override

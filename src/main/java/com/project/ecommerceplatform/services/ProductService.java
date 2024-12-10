@@ -7,9 +7,12 @@ import java.util.List;
 
 public interface ProductService {
     public Product getProductWithId(int id) throws ProductNotFoundException;
-    public List<Product> getProducts();
+    public List<Product> getProducts() throws ProductNotFoundException;
     public List<Product> getProductsByCategory(String category);
-    public Product updateProduct(Product product);
+
+
+    Product updateProduct(int id, Product product) throws ProductNotFoundException;
+
     public boolean deleteProduct(Product product);
 
 }

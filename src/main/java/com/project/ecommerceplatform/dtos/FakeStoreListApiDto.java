@@ -6,5 +6,5 @@ import java.util.List;
 
 @Data
 public class FakeStoreListApiDto {
-    private List<FakeStoreApiDto> fakeStoreApiDtoList;
+    private FakeStoreApiDto[] fakeStoreApiDtoList;
 }

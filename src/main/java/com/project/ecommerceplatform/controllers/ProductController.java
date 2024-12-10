@@ -2,22 +2,24 @@ package com.project.ecommerceplatform.controllers;
 
 import com.project.ecommerceplatform.exceptions.ProductNotFoundException;
 import com.project.ecommerceplatform.models.Product;
+import com.project.ecommerceplatform.services.FakeStoreApiProductService;
 import com.project.ecommerceplatform.services.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/ecom/product/")
 public class ProductController {
 
     private final ProductService productService;
+    private final FakeStoreApiProductService fakeStoreApiProductService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, FakeStoreApiProductService fakeStoreApiProductService) {
         this.productService = productService;
+        this.fakeStoreApiProductService = fakeStoreApiProductService;
     }
 
     @GetMapping("/{id}")
@@ -25,6 +27,18 @@ public class ProductController {
         Product product = productService.getProductWithId(id);
         ResponseEntity<Product> response = new ResponseEntity<>(product, HttpStatus.OK);
         return response;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Product>> getAllProducts() throws ProductNotFoundException {
+        List<Product> productList = productService.getProducts();
+        return new ResponseEntity<>(productList, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable("id") int id, @RequestBody Product product) throws ProductNotFoundException {
+        product = fakeStoreApiProductService.updateProduct(id, product);
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
 }
