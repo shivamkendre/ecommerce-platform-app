@@ -9,10 +9,8 @@ public interface ProductService {
     public Product getProductWithId(int id) throws ProductNotFoundException;
     public List<Product> getProducts() throws ProductNotFoundException;
     public List<Product> getProductsByCategory(String category);
-
-
-    Product updateProduct(int id, Product product) throws ProductNotFoundException;
-
-    public boolean deleteProduct(Product product);
+    public Product replaceProduct(int id, Product product) throws ProductNotFoundException;
+    public Product updateProduct(int id, Product product) throws ProductNotFoundException;
+    public Product deleteProduct(int id) throws ProductNotFoundException;
 
 }

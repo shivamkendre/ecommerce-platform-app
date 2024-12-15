@@ -11,5 +11,4 @@ public class FakeStoreApiDto {
     private String category;
     private String description;
     private Rating rating;
-
 }

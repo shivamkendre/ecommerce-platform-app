@@ -41,4 +41,16 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Product> replaceProduct(@PathVariable("id") int id, @RequestBody Product product) throws ProductNotFoundException {
+        product = fakeStoreApiProductService.replaceProduct(id, product);
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Product> deleteProduct(@PathVariable("id") int id) throws ProductNotFoundException {
+        Product product = productService.deleteProduct(id);
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
 }
