@@ -1,9 +1,13 @@
 package com.project.ecommerceplatform.controllers;
 
+import com.project.ecommerceplatform.exceptions.CategoryNotFoundException;
+import com.project.ecommerceplatform.exceptions.NoAuditDataAvailableException;
 import com.project.ecommerceplatform.exceptions.ProductNotFoundException;
+import com.project.ecommerceplatform.exceptions.ProductSaveException;
 import com.project.ecommerceplatform.models.Product;
 import com.project.ecommerceplatform.services.FakeStoreApiProductService;
 import com.project.ecommerceplatform.services.ProductService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +21,7 @@ public class ProductController {
     private final ProductService productService;
     private final FakeStoreApiProductService fakeStoreApiProductService;
 
-    public ProductController(ProductService productService, FakeStoreApiProductService fakeStoreApiProductService) {
+    public ProductController(@Qualifier("SelfProductService") ProductService productService, FakeStoreApiProductService fakeStoreApiProductService) {
         this.productService = productService;
         this.fakeStoreApiProductService = fakeStoreApiProductService;
     }
@@ -51,6 +55,13 @@ public class ProductController {
     public ResponseEntity<Product> deleteProduct(@PathVariable("id") int id) throws ProductNotFoundException {
         Product product = productService.deleteProduct(id);
         return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
+
+    @PostMapping
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) throws ProductSaveException, CategoryNotFoundException, NoAuditDataAvailableException {
+        Product savedProduct = productService.createProduct(product);
+        return new ResponseEntity<>(savedProduct, HttpStatus.OK);
     }
 
 }

@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@Service("fakeStoreProductService")
 public class FakeStoreApiProductService implements ProductService {
 
 
@@ -33,7 +33,7 @@ public class FakeStoreApiProductService implements ProductService {
 
 
     @Override
-    public Product getProductWithId(int id) throws ProductNotFoundException {
+    public Product getProductWithId(long id) throws ProductNotFoundException {
         FakeStoreApiDto fakeStoreApiDto = restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeStoreApiDto.class);
         if (fakeStoreApiDto == null) {
             throw new ProductNotFoundException("Product not found");
@@ -86,5 +86,10 @@ public class FakeStoreApiProductService implements ProductService {
             throw new ProductNotFoundException("Product not found!");
         }
         return dtoToModelConverter.convertFakeStoreApiToProduct(fakeStoreApiDto);
+    }
+
+    @Override
+    public Product createProduct(Product product) {
+        return null;
     }
 }

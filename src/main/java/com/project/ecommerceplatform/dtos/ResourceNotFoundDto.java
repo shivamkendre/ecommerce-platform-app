@@ -1,7 +1,7 @@
 package com.project.ecommerceplatform.dtos;
 
 
-public class ProductNotFoundDto {
+public class ResourceNotFoundDto {
     private int errorId;
     private String errorName;
     private String errorDescription;
